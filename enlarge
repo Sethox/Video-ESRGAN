@@ -45,7 +45,7 @@ echo "Framerate: $FRAMERATE"
 
 # 4. Extract frames from the input video
 echo "Step 1/3: Extracting frames from $INPUT_VIDEO ..."
-ffmpeg -i "$INPUT_VIDEO" -qscale:v 1 -qmin 1 -qmax 1 -fps_mode passthrough "${TMP_FRAMES_DIR}/frame%08d.jpg"
+ffmpeg -i "$INPUT_VIDEO" -qscale:v 1 -qmin 1 -qmax 1 -fps_mode passthrough -threads 0 "${TMP_FRAMES_DIR}/frame%08d.jpg"
 
 # Count total frames
 TOTAL_FRAMES=$(find "$TMP_FRAMES_DIR" -type f | wc -l)
@@ -91,11 +91,11 @@ OUTPUT_VIDEO="${INPUT_VIDEO%.*}_enhanced.${INPUT_FORMAT}"
 if [[ "$INPUT_FORMAT" == "mp4" ]]; then
   # MP4: Use libx264 with yuv420p for compatibility
   ffmpeg -framerate "$FRAMERATE" \
-    -i "${OUT_FRAMES_DIR}/frame%08d.jpg" -i "$INPUT_VIDEO" -map 0:v:0 -map 1:a:0 -c:a copy -disposition:v default -disposition:a default -disposition:s 0 -c:v libx264 -pix_fmt yuv420p -preset medium "$OUTPUT_VIDEO" -y
+    -i "${OUT_FRAMES_DIR}/frame%08d.jpg" -i "$INPUT_VIDEO" -map 0:v:0 -map 1:a:0 -c:a copy -disposition:v default -disposition:a default -disposition:s 0 -c:v libx264 -pix_fmt yuv420p -preset medium -threads 0 "$OUTPUT_VIDEO" -y
 
 elif [[ "$INPUT_FORMAT" == "mkv" ]]; then
   # MKV: Preserve all streams (audio + subtitles)
-  ffmpeg -framerate "$FRAMERATE" -i "${OUT_FRAMES_DIR}/frame%08d.jpg" -i "$INPUT_VIDEO" -map 0:v:0 -map 1:a -map 1:s? -disposition:v default -disposition:a default -disposition:s 0 -c:a copy -c:s copy -c:v libx264 -pix_fmt yuv420p -preset medium "$OUTPUT_VIDEO" -y
+  ffmpeg -framerate "$FRAMERATE" -i "${OUT_FRAMES_DIR}/frame%08d.jpg" -i "$INPUT_VIDEO" -map 0:v:0 -map 1:a -map 1:s? -disposition:v default -disposition:a default -disposition:s 0 -c:a copy -c:s copy -c:v libx264 -pix_fmt yuv420p -preset medium -threads 0 "$OUTPUT_VIDEO" -y
 fi
 
 if [ $? -ne 0 ]; then
