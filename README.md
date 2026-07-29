@@ -1,5 +1,5 @@
 # Video-ESRGAN
-Automate video upscaling with Real-ESRGAN & FFmpeg – extract, enhance, and merge frames in one click.
+Automate video upscaling with Real-ESRGAN & FFmpeg – extract, enhance, and merge frames in one simple script.
 
 ## Do note
 This is a fork of https://github.com/greatbody/Video-ESRGAN?tab=MIT-1-ov-file,
