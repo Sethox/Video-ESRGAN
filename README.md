@@ -13,13 +13,13 @@ You need to download the `realesrgan-ncnn-vulkan` executable from the official R
 
 **Download Link:** https://github.com/xinntao/Real-ESRGAN/releases
 
-1. Go to the [Real-ESRGAN releases page](https://github.com/xinntao/Real-ESRGAN/releases)
-2. Download the appropriate version for your operating system:
+1. Go to the [Real-ESRGAN releases page](https://github.com/xinntao/Real-ESRGAN/releases). For now V0.2.5.0 has final releases, unless you build it yourself.
+3. Download the appropriate version for your operating system:
    - **Windows**
    - **macOS**
    - **Linux**
-3. Extract the downloaded archive
-4. Place the `realesrgan-ncnn-vulkan` executable and the `models` directory in the same directory as the `enlarge` script.
+4. Extract the downloaded archive
+5. Place the `realesrgan-ncnn-vulkan` executable and the `models` directory in the same directory as the `enlarge` script.
 
 For more information about Real-ESRGAN, visit the [official repository](https://github.com/xinntao/Real-ESRGAN).
 
@@ -72,10 +72,16 @@ ffmpeg -version
 ## Usage
 
 ### Basic Usage
-To enhance a video, simply run the `enlarge` script with your input video file:
+To enhance a video, simply run the `enlarge` script with your input video file, if `realesrgan-ncnn-vulkan` exists in the same directory:
 
 ```bash
 ./enlarge input_video.mp4
+```
+
+Otherwise:
+
+```bash
+./enlarge -p /path/to/file/realesrgan-ncnn-vulkan input_video.mp4
 ```
 
 ### What the Script Does
@@ -85,18 +91,18 @@ To enhance a video, simply run the `enlarge` script with your input video file:
 
 ### Output
 The script generates:
-- **Enhanced video**: `enhanced_YYYYMMDD_HHMMSS.mp4` - Your upscaled video
+- **Enhanced video**: `input_video_enhanced.mp4` - Your upscaled video
 - **Temporary folders**:
   - `tmp_frames_YYYYMMDD_HHMMSS/` - Original extracted frames
   - `out_frames_YYYYMMDD_HHMMSS/` - Enhanced frames
 
 ### Features
-- ✅ **Progress tracking** with real-time progress bar and ETA
+- ✅ **Progress tracking** with real-time progress bar
 - ✅ **Automatic framerate detection** from source video
 - ✅ **Audio preservation** - copies original audio to enhanced video
+- ✅ **Subtitles preservation** - copies original subtitles to enhanced video
 - ✅ **Unique timestamped outputs** - prevents file conflicts
-- ✅ **Error handling** with detailed feedback
-- ✅ **Processing statistics** - shows total time and frames processed
+- ✅ **Automatic detection of threads** - Making ffmpeg using multiple threads (on auto)
 
 ### Example
 ```bash
@@ -105,6 +111,8 @@ chmod +x enlarge
 
 # Enhance a video
 ./enlarge my_video.mp4
+# or
+./enlarge my_video.mkv
 
 # Output will be something like:
 # enhanced_20241224_143052.mp4
@@ -115,7 +123,3 @@ chmod +x enlarge
 - Processing time depends on video length, resolution, and your hardware
 - You can safely delete the temporary frame folders after processing
 - For best results, ensure your input video has good quality (not heavily compressed)
-
-## Example Files
-
-Check the `example/` directory for sample input and output files to test the script.
